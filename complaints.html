@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0c0a1f">
+    <title>Murojaat va shikoyatlar | COSMOLAB</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg: #0c0a1f;
+            --surface: #191638;
+            --surface-raised: #211d47;
+            --line: #39345f;
+            --text: #f1efff;
+            --muted: #aaa6cb;
+            --gold: #ffc857;
+            --orange: #ff7a3d;
+            --mint: #4de3b5;
+            font-family: "Manrope", "Segoe UI", sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            color: var(--text);
+            background:
+                radial-gradient(850px 500px at 95% 0%, #221d53 0%, transparent 70%),
+                radial-gradient(650px 450px at 0% 55%, #26152c 0%, transparent 68%),
+                var(--bg);
+        }
+
+        a { color: inherit; text-decoration: none; }
+        button, input, select, textarea { font: inherit; }
+        button { color: inherit; cursor: pointer; }
+        :focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+
+        .topbar {
+            display: flex;
+            min-height: 70px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 12px max(22px, calc((100vw - 1120px) / 2));
+            background: #100e24cc;
+            border-bottom: 1px solid #39345f;
+            backdrop-filter: blur(14px);
+        }
+
+        .logo { font-family: "Unbounded", sans-serif; font-size: 15px; font-weight: 700; letter-spacing: .3px; }
+        .logo span { color: var(--orange); }
+        .back-link { color: var(--muted); font-size: 12px; font-weight: 700; }
+        .back-link:hover { color: var(--gold); }
+        main { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+
+        .intro { padding: 54px 0 28px; }
+        .eyebrow { color: var(--gold); font-size: 10px; font-weight: 800; letter-spacing: 1.6px; }
+        h1, h2, h3 { margin: 0; font-family: "Unbounded", "Manrope", sans-serif; line-height: 1.2; }
+        h1 { max-width: 700px; margin-top: 13px; font-size: clamp(27px, 4.2vw, 42px); }
+        .intro p { max-width: 600px; margin: 13px 0 0; color: var(--muted); font-size: 13px; line-height: 1.75; }
+
+        .layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(250px, .7fr); gap: 18px; align-items: start; padding-bottom: 60px; }
+        .panel { padding: 23px; background: #191638e8; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 18px 44px #05041155; }
+        .panel h2 { font-size: 15px; }
+        .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 20px; }
+        .panel-kicker { color: var(--muted); font-size: 10px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .field { display: grid; gap: 7px; }
+        .field.wide { grid-column: 1 / -1; }
+        .field label { color: #dedbf2; font-size: 11px; font-weight: 700; }
+        .field input, .field select, .field textarea {
+            width: 100%;
+            min-width: 0;
+            padding: 11px 12px;
+            color: var(--text);
+            background: #100e25;
+            border: 1px solid #454064;
+            border-radius: 7px;
+            outline: none;
+            font-size: 12px;
+        }
+        .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px #ffc85720; }
+        .field textarea { min-height: 150px; resize: vertical; line-height: 1.65; }
+        .field input::placeholder, .field textarea::placeholder { color: #777391; }
+        .field select:invalid { color: #777391; }
+        .field option { color: var(--text); background: var(--surface); }
+        .field-note { color: var(--muted); font-size: 10px; line-height: 1.5; }
+        .form-actions { display: flex; align-items: center; gap: 13px; margin-top: 18px; }
+        .submit {
+            min-height: 42px;
+            padding: 0 18px;
+            color: #241307;
+            background: linear-gradient(120deg, var(--gold), var(--orange));
+            border: 0;
+            border-radius: 7px;
+            font-size: 11px;
+            font-weight: 800;
+            transition: transform .15s, filter .15s;
+        }
+        .submit:hover { filter: brightness(1.08); transform: translateY(-1px); }
+        .submit:disabled { cursor: wait; opacity: .65; }
+        .form-status { min-height: 18px; color: var(--mint); font-size: 11px; }
+        .form-status.error { color: #ff987e; }
+
+        .side-stack { display: grid; gap: 14px; }
+        .info-panel { padding: 18px; background: #171431; border: 1px solid var(--line); border-radius: 10px; }
+        .info-icon { display: grid; width: 34px; height: 34px; place-items: center; margin-bottom: 13px; color: #1b1533; background: var(--gold); border-radius: 9px; font-size: 16px; }
+        .info-panel h3 { font-size: 12px; }
+        .info-panel p { margin: 8px 0 0; color: var(--muted); font-size: 10px; line-height: 1.7; }
+        .local-note { border-left: 2px solid var(--orange); }
+        .list-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 29px 0 12px; }
+        .list-heading h2 { font-size: 14px; }
+        .list-heading span { color: var(--muted); font-size: 10px; }
+        .complaint-list { display: grid; gap: 9px; }
+        .empty { padding: 17px; color: var(--muted); background: #111027; border: 1px dashed #454064; border-radius: 8px; font-size: 11px; text-align: center; }
+        .complaint-item { padding: 14px; background: #111027; border: 1px solid #343052; border-radius: 8px; }
+        .complaint-top { display: flex; justify-content: space-between; gap: 10px; }
+        .complaint-top strong { min-width: 0; overflow-wrap: anywhere; font-size: 11px; }
+        .complaint-id { flex: 0 0 auto; color: var(--gold); font-size: 9px; }
+        .complaint-meta { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 7px; color: var(--muted); font-size: 9px; }
+        .complaint-text { margin: 10px 0 0; color: #d3d0e7; font-size: 10px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
+        footer { display: flex; justify-content: space-between; gap: 16px; padding: 20px 0 26px; color: var(--muted); border-top: 1px solid var(--line); font-size: 10px; }
+
+        @media (max-width: 760px) {
+            .layout { grid-template-columns: 1fr; }
+            .side-stack { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 520px) {
+            .topbar { min-height: 60px; padding-inline: 16px; }
+            main { width: calc(100% - 28px); }
+            .intro { padding-top: 37px; }
+            .panel { padding: 16px; }
+            .form-grid, .side-stack { grid-template-columns: 1fr; }
+            .field.wide { grid-column: auto; }
+            .form-actions { align-items: flex-start; flex-direction: column; }
+            footer { flex-direction: column; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <a href="index.html" class="logo">🚀 COSMO<span>LAB</span></a>
+        <a href="index.html" class="back-link">← Bosh sahifaga qaytish</a>
+    </header>
+
+    <main>
+        <section class="intro">
+            <div class="eyebrow">COSMOLAB · ALOQA MARKAZI</div>
+            <h1>Murojaat va shikoyatlar</h1>
+            <p>Taklif, muammo yoki shikoyatingizni yozib qoldiring. Murojaatingiz ro‘yxatda saqlanadi.</p>
+        </section>
+
+        <div class="layout">
+            <section class="panel" aria-labelledby="formTitle">
+                <div class="panel-head">
+                    <h2 id="formTitle">Yangi murojaat</h2>
+                    <span class="panel-kicker">Barcha maydonlar tekshiriladi</span>
+                </div>
+
+                <form id="complaintForm">
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="category">Murojaat turi</label>
+                            <select id="category" name="category" required>
+                                <option value="" disabled selected>Turini tanlang</option>
+                                <option value="Shikoyat">Shikoyat</option>
+                                <option value="Texnik muammo">Texnik muammo</option>
+                                <option value="Taklif">Taklif</option>
+                                <option value="Boshqa">Boshqa</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="subject">Mavzu</label>
+                            <input id="subject" name="subject" maxlength="100" placeholder="Qisqacha sarlavha" required>
+                        </div>
+                        <div class="field">
+                            <label for="name">Ismingiz</label>
+                            <input id="name" name="name" autocomplete="name" maxlength="80" placeholder="Ism (ixtiyoriy)">
+                        </div>
+                        <div class="field">
+                            <label for="email">Email manzil</label>
+                            <input id="email" name="email" type="email" autocomplete="email" maxlength="120" placeholder="email@example.com">
+                        </div>
+                        <div class="field wide">
+                            <label for="message">Batafsil ma’lumot</label>
+                            <textarea id="message" name="message" minlength="10" maxlength="2000" placeholder="Vaziyatni tushuntiring. Qachon va qayerda yuz berdi?" required></textarea>
+                            <span class="field-note">10 dan 2000 tagacha belgi kiriting.</span>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button class="submit" type="submit">Murojaatni saqlash</button>
+                        <span class="form-status" id="formStatus" role="status" aria-live="polite"></span>
+                    </div>
+                </form>
+            </section>
+
+            <aside class="side-stack" aria-label="Murojaat haqida">
+                <section class="info-panel">
+                    <div class="info-icon" aria-hidden="true">✓</div>
+                    <h3>Nimalar yuborish mumkin?</h3>
+                    <p>Sayt ishlashidagi xatolar, foydalanish bo‘yicha savollar, takliflar yoki xizmatga oid shikoyatlar.</p>
+                </section>
+                <section class="info-panel local-note">
+                    <div class="info-icon" aria-hidden="true">i</div>
+                    <h3>Saqlash haqida</h3>
+                    <p>Bu demo sahifa. Server ulanmagani uchun murojaatlar faqat shu brauzerda saqlanadi va jamoaga yuborilmaydi.</p>
+                </section>
+            </aside>
+        </div>
+
+        <section aria-labelledby="listTitle">
+            <div class="list-heading">
+                <h2 id="listTitle">Saqlangan murojaatlar</h2>
+                <span id="complaintCount">0 ta</span>
+            </div>
+            <div class="complaint-list" id="complaintList" aria-live="polite"></div>
+        </section>
+
+        <footer>
+            <a href="index.html" class="logo">🚀 COSMO<span>LAB</span></a>
+            <span>© 2026 COSMOLAB · Murojaatlar brauzeringizda saqlanadi</span>
+        </footer>
+    </main>
+
+    <script>
+        const storageKey = 'cosmolab-complaints';
+        const form = document.querySelector('#complaintForm');
+        const list = document.querySelector('#complaintList');
+        const status = document.querySelector('#formStatus');
+        const count = document.querySelector('#complaintCount');
+
+        function readComplaints() {
+            try {
+                const saved = JSON.parse(localStorage.getItem(storageKey) || '[]');
+                return Array.isArray(saved) ? saved : [];
+            } catch {
+                return [];
+            }
+        }
+
+        function renderComplaints() {
+            const complaints = readComplaints();
+            count.textContent = `${complaints.length} ta`;
+            list.replaceChildren();
+
+            if (!complaints.length) {
+                const empty = document.createElement('div');
+                empty.className = 'empty';
+                empty.textContent = 'Hozircha saqlangan murojaatlar yo‘q.';
+                list.appendChild(empty);
+                return;
+            }
+
+            complaints.forEach((complaint) => {
+                const item = document.createElement('article');
+                item.className = 'complaint-item';
+                const top = document.createElement('div');
+                top.className = 'complaint-top';
+                const subject = document.createElement('strong');
+                subject.textContent = complaint.subject;
+                const id = document.createElement('span');
+                id.className = 'complaint-id';
+                id.textContent = complaint.id;
+                top.append(subject, id);
+
+                const meta = document.createElement('div');
+                meta.className = 'complaint-meta';
+                const category = document.createElement('span');
+                category.textContent = complaint.category;
+                const date = document.createElement('span');
+                date.textContent = complaint.date;
+                meta.append(category, date);
+
+                const message = document.createElement('p');
+                message.className = 'complaint-text';
+                message.textContent = complaint.message;
+                item.append(top, meta, message);
+                list.appendChild(item);
+            });
+        }
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            status.textContent = '';
+            status.classList.remove('error');
+
+            if (!form.reportValidity()) return;
+
+            const data = new FormData(form);
+            const complaint = {
+                id: `CL-${Date.now().toString(36).toUpperCase()}`,
+                category: data.get('category'),
+                subject: data.get('subject').trim(),
+                name: data.get('name').trim(),
+                email: data.get('email').trim(),
+                message: data.get('message').trim(),
+                date: new Intl.DateTimeFormat('uz-UZ', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date())
+            };
+
+            try {
+                const complaints = readComplaints();
+                complaints.unshift(complaint);
+                localStorage.setItem(storageKey, JSON.stringify(complaints));
+                form.reset();
+                status.textContent = `Murojaat saqlandi. Raqami: ${complaint.id}`;
+                renderComplaints();
+            } catch {
+                status.textContent = 'Brauzerda saqlash imkoni bo‘lmadi.';
+                status.classList.add('error');
+            }
+        });
+
+        renderComplaints();
+    </script>
+</body>
+</html>
